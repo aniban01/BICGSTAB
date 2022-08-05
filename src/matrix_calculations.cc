@@ -5,8 +5,8 @@ namespace matrix_calculations
 		
 	template class vector <int , double>;
         template class vector <int, float >;
-        template class vector <long unsigned int , double>;
-        template class vector <long unsigned int , float>;
+        template class vector <long int , double>;
+        template class vector <long int , float>;
 
 //	template <typename index_type , typename value_type>
 //	int vector<index_type , value_type>::index = 0;
@@ -138,12 +138,12 @@ namespace matrix_calculations
                 }
                 return B;
         }
-
+	
 
 	template class sparse_matrix_operations <int , double>;
         template class sparse_matrix_operations <int, float >;
-        template class sparse_matrix_operations <long unsigned int , double>;
-        template class sparse_matrix_operations <long unsigned int , float>;
+        template class sparse_matrix_operations <long int , double>;
+        template class sparse_matrix_operations <long int , float>;
 
 
 
@@ -219,6 +219,7 @@ namespace matrix_calculations
 		{
 			sum += A.value[index] ;
 		}
+		std::cout << "sum of row " << r << " is " << sum;
 		return sum;
 	}
 /*

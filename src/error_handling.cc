@@ -11,7 +11,7 @@ void generate_error(int A)
 			break;
 		
 		case 11:	
-			std::cerr << "Error (code 11): <matrix::sparse_matrix::index_type return_element_index(index_type r , index_type c)>: Attempted to access row  which is out of scope \n";
+			std::cerr << "Error (code 11): <matrix::sparse_matrix::index_type return_element_index(index_type r , index_type c)>: Attempted to access row or column which is out of scope \n";
                         exit(1);
 			break;
 		

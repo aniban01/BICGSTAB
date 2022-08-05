@@ -9,6 +9,32 @@
 
 namespace matrix_calculations
 {
+	
+	/**
+	* \brief  vector class which efficiently performs all vector operations required for the program 
+	* \description 
+     	* The class has two member objects 1) size (data type : index_type) which stores size of the vector 2) A (data type : value_type) which is a pointer to an alligned data block of type vector type
+     	* The functions are created to utilize SIMD operations with alligned data sets for efficient implimentation of vector operations
+     	* 
+     	* \functions
+	* return_size() : returns size of the vector
+	* value( index_type c ) : return value at index c
+	* norm() : calculates second norm of the vector
+	* update_value( index_type i , value_type val) : updates value provided by val at position i
+	* 
+	* \operator overloading
+	*  vector operator + (value_type num);
+	*  vector operator * (value_type num);
+	*  vector operator / (value_type num);
+	*  vector operator - (value_type num);
+	*  vector operator + (vector<index_type , value_type > num);
+	*  vector operator * (vector<index_type , value_type > num);
+	*  vector operator / (vector<index_type , value_type > num);
+	*  vector operator - (vector<index_type , value_type > num);
+	*
+	* */
+
+
 	template <typename index_type , typename value_type>
 	class vector
 	{
@@ -123,7 +149,7 @@ namespace matrix_calculations
 		
 
 
-		// Functions returning values
+		// iunctions returning values
 		index_type return_size() 
 		{
 			return size;
@@ -167,14 +193,28 @@ namespace matrix_calculations
         	vector operator * (vector<index_type , value_type > num);
         	vector operator / (vector<index_type , value_type > num);
         	vector operator - (vector<index_type , value_type > num);
-		void output_pointer()
-		{
-			std::cout << "Allocating pointer using other constructors" << A << std::endl;	
-		}
-
 	};
 
 	template <typename index_type , typename value_type>
+
+
+	/**
+	* \brief sparse_matrix_operations  class which efficiently performs all matrix operations required for the program 
+	* \description 
+     	* The class has one member object : A : Built on the sparse_matrix class defined in matrix_allocation.h
+     	* The functions are created to utilize functions defined in sparse_matrix class efficiently impliment of matrix operations
+     	* 
+     	* \functions
+	* return_row_size() : returns row size of the vector
+	* return_col_size() : returns col size of the vector
+	* matrix_value( index_type r , index_type c ) : return value at position row = r , column = c
+	* norm() : calculates second norm of the matrix
+	* update_value( index_type i , value_type val) : updates value provided by val at position i
+	* row_sum( index_type r) : returns the sum of the row value for row r
+	* SPMM (matrix_calculations::vector <index_type , value_type> ) : performs matrix vector multiplication 
+	*
+	* */
+
 
 	class sparse_matrix_operations
 	{
@@ -187,10 +227,8 @@ namespace matrix_calculations
 			for(index_type i = (index_type) 1 ; i <= r && i <= c ; i++)
 			{
 				A.add_element(i,i,1);
-				//std::cout << "Matrix value ["<< i << " , " << i << "] generated with value " << 1  << std::endl; 
 			
 			}	
-//			std::cout << "Matrix sucessfully generated " << std::endl;
 		}
 		sparse_matrix_operations(index_type r , index_type c , std::function<value_type (index_type , index_type)> init )
 		{
@@ -198,11 +236,11 @@ namespace matrix_calculations
 			{
 				for(index_type j = (index_type) 1 ; j <= c ; j++)
 				{
+				//	std::cout << "In sparse matrix operation for element " << i << " , " << j << std::endl;
 					A.add_element(i, j , init(i,j));
-					//std::cout << "Matrix value ["<< i << " , " << j << "] generated with value " << init(i,j) <<  std::endl; 
+				//	std::cout << "Exiting sparse matrix operation  for element " << i << " , " << j << std::endl;
 				}
 			}
-//			std::cout << "Matrix sucessfully generated " << std::endl;
 
 		}		
 
@@ -211,11 +249,12 @@ namespace matrix_calculations
 		//sparse_matrix_operations& operator=(const sparse_matrix_operations&)  = default;
                 //sparse_matrix_operations& operator=(sparse_matrix_operations&&) = default      ;
 		
+            		
 		// Returning matrix values 
 		value_type matrix_value( index_type r , index_type c)
 		{
 			auto index = A.return_element_index(r,c); 
-			if (index <= 0)
+			if (index < 0)
  			{
 				return 0;
 			}
@@ -233,6 +272,13 @@ namespace matrix_calculations
 			return A.col_size(); 
 		}
 		
+		void print_matrix()
+		{
+			std::cout << " Printing element " << std::endl;
+			A.print_elements();
+			
+			A.print_matrix(A.row_size() , A.col_size());
+		}
 		// matrix operations on the sparse matrix
 		value_type row_sum( index_type r);
 		value_type norm();		

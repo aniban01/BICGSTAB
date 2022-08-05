@@ -8,10 +8,10 @@ namespace solver
 		auto num_rows = A.return_row_size();
 		auto num_cols = A.return_col_size();
 		index_type vector_index = 0;
-		for(auto i = (index_type)1 ; i < num_rows ; ++i)
+		for(auto i = (index_type)1 ; i <= num_rows ; ++i)
 		{
 			std::cout << " | " ;
-			for(auto j = (index_type)1 ; j < num_cols ; ++j)
+			for(auto j = (index_type)1 ; j <= num_cols ; ++j)
 			{
 				std::cout<< " " << A.matrix_value(i,j) << " " ; 
 			}
@@ -24,7 +24,7 @@ namespace solver
 				std::cout << " | " << x.value(vector_index) << " |       | " << b.value(vector_index) << " | ";  
 			}	
 			std::cout << std::endl;
-
+			vector_index++;
 		
 		}
 	}
@@ -124,7 +124,7 @@ namespace solver
 
 	template class BICGSTAB <int , double>;
 	template class BICGSTAB <int , float>;
-	template class BICGSTAB <long unsigned int , double>;
-	template class BICGSTAB <long unsigned int , float>;
+	template class BICGSTAB <long int , double>;
+	template class BICGSTAB <long int , float>;
 
 }

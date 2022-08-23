@@ -261,37 +261,56 @@ namespace matrix
 			{
 				if(c < col[index] || c > col[max_index])
 				{
-//					std::cout << "Exiting return_element_index as element (" << r << " , " << c << " ) not found with column range between  "<< col[index] << " to  " << col[max_index] << std::endl;       
+				//	std::cout << "Exiting return_element_index as element (" << r << " , " << c << " ) not found with column range between  "<< col[index] << " to  " << col[max_index] << std::endl;       
 
 					return -1;
 				}
 				if(c == col[index])
 				{
+					if((index_type)value.size() <= index)
+					{
+						std::cout << "index element (" << r << " , " << c << " greater than size of value vector " << value.size() << std::endl;       	
+					}
 					return index;
 				}
 				else if(c == col[max_index])
 				{
+					 if((index_type)value.size() <= max_index)
+                                        {
+						std::cout << "max_index index for " << r << " , " << c << " greater than size of vector " << value.size() <<  std::endl;       
+					}
 					return max_index;
 				}
+/*
 				auto temp = (index_type) ((max_index - index) / 2);
-				while( max_index > index )
+				while( max_index > index && (max_index) < (index_type)value.size())
 				{
 					if(c == col[index + temp])
 					{
-//						std::cout << "Exiting return_element_index as element (" << r << " , " << c << " ) found in index "<< index + temp << " with value " << value[temp+index] << std::endl;
+						std::cout << "Exiting return_element_index as element (" << r << " , " << c << " ) found in index "<< index + temp << " with value " << value[temp+index] << std::endl;
 
 						return index + temp;
 					}
 					else if(c > col[index + temp])
 					{
+						std::cout <<"c value is greater than index " << std::endl;
 						index = index + temp;
 					}
 					else
 					{
+						std::cout <<"c value is lesserthan index " << std::endl;
 						max_index = index + temp;
 					}
 					temp = (index_type) ((max_index - index) / 2);
 
+				}
+*/
+				for(auto temp_iterator = index ; temp_iterator <= max_index ; temp_iterator++)
+				{
+					if(col[temp_iterator] == c)
+					{
+						return temp_iterator;
+					}
 				}
 //				std::cout << "Exiting return_element_index as element (" << r << " , " << c << " ) as element is not found "<< std::endl;
 				return -1;

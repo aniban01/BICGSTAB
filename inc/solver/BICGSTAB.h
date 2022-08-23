@@ -27,7 +27,10 @@ namespace solver
 		
 		BICGSTAB(index_type r , index_type c ,  std::function<value_type (index_type , index_type)> init , std::function<value_type (index_type ,  std::vector<value_type>)> init_v , std::vector<value_type> init_v_values , value_type val_1 = (value_type)0  ) : A(r,c, init) , x(c,val_1) , b(c, init_v , init_v_values){}; 
 	
+		BICGSTAB( index_type c ,  std::string path , value_type val_1 = (value_type)0 ,  value_type val_2 = (value_type)2) : A(path) , x(c,val_1) , b(c, val_2){};
 		
+		 BICGSTAB(index_type c ,  std::string path , std::function<value_type (index_type ,  std::vector<value_type>)> init_v , std::vector<value_type> init_v_values , value_type val_1 = (value_type)0  ) : A(path) , x(c,val_1) , b(c, init_v , init_v_values){};
+
 
 		value_type solve( value_type tolerance , unsigned long int max_sim);
 		void display();

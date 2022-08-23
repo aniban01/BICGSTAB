@@ -1,5 +1,5 @@
-#ifndef Vector_matrix_caluclations_2022
-#define Vector_matrix_caluclations_2022 
+#ifndef Vector_matrix_caluclations_parallel_2022
+#define Vector_matrix_caluclations_parallel_2022 
 
 #include <omp.h>
 #include <vector>
@@ -8,7 +8,8 @@
 #include "matrix_allocation.h"
 #include "global_variables.h"
 
-namespace matrix_calculations
+
+namespace matrix_calculations_parallel
 {
 	
 	/**
@@ -43,62 +44,30 @@ namespace matrix_calculations
 		value_type *A;
 		public:
 		// constructors	
-		vector(index_type r , value_type v = (value_type)0 ) : size{r} 
+			
+		vector()
 		{
-			if(r*sizeof*A % allignment != 0)
-			{
-				generate_error(21);
-
-			}
-			A = (value_type * )std::aligned_alloc(allignment, r * sizeof *A);		
-		
-							
-			for(index_type a = 0 ; a < r ; a++)
-			{
-				A[a] = v;
-			}
-		}
-		
-		vector(index_type r , value_type val , std::function<value_type (index_type , value_type)>  init ) : size{r}
-		{
-	
-			if(r*sizeof*A % allignment != 0)
-                        {
-                                generate_error(21);
-
-			 }
-
-			A = (value_type * ) std::aligned_alloc(allignment, r * sizeof *A);
-		
-			for(index_type a = 0 ; a < r ; a++)
-			{
-				A[a] = init(a,val);
-			}
-		}
-				
-		vector(index_type r , std::function<value_type (index_type , std::vector<value_type>)> init , std::vector<value_type> init_v_values ) : size{r}
-                {
-
-                        if(r*sizeof*A % allignment != 0)
-                        {
-                                generate_error(21);
-			}
-
-                        A = (value_type *) std::aligned_alloc(allignment, r * sizeof *A);
-
-                        for(index_type a = 0 ; a < r ; a++)
-                        {
-                                A[a] = init(a,init_v_values);
-
-		       }
-		}				
-		
-		  vector()
-		{	
 			A = NULL;
 			size = 0;
 		}
 	
+		vector(index_type r , value_type v = (value_type)0 ) : size{r}
+                {
+                        if(r*sizeof*A % allignment != 0)
+                        {
+                                generate_error(21);
+
+                        }
+                        A = (value_type * )std::aligned_alloc(allignment, r * sizeof *A);
+
+
+                        for(index_type a = 0 ; a < r ; a++)
+                        {
+                                A[a] = v;
+                        }
+                }
+
+
                 ~vector()
                 {
 			std::free(A);	
@@ -153,7 +122,7 @@ namespace matrix_calculations
 		
 
 
-		// iunctions returning values
+		// functions returning values
 		index_type return_size() 
 		{
 			return size;
@@ -175,7 +144,7 @@ namespace matrix_calculations
 
 		// Functions to carry out vactor operations
 		value_type norm();		
-		value_type dot_product(matrix_calculations::vector <index_type , value_type>);	
+		value_type dot_product(matrix_calculations_parallel::vector <index_type , value_type>);	
 		void update_value( index_type i , value_type val)
 		{
 			if(i < 0 || i >= size)
@@ -269,7 +238,7 @@ namespace matrix_calculations
 	* norm() : calculates second norm of the matrix
 	* update_value( index_type i , value_type val) : updates value provided by val at position i
 	* row_sum( index_type r) : returns the sum of the row value for row r
-	* SPMM (matrix_calculations::vector <index_type , value_type> ) : performs matrix vector multiplication 
+	* SPMM (matrix_calculations_parallel::vector <index_type , value_type> ) : performs matrix vector multiplication 
 	*
 	* */
 
@@ -280,102 +249,7 @@ namespace matrix_calculations
 
 		public:
 		// Constructor to generate identity matrix
-		sparse_matrix_operations()
-                {};
-
-		sparse_matrix_operations(index_type r , index_type c)
-		{
-			for(index_type i = (index_type) 1 ; i <= r && i <= c ; i++)
-			{
-				A.add_element(i,i,1);
-			
-			}	
-		}
-		
-		sparse_matrix_operations(index_type r , index_type c , std::function<value_type (index_type , index_type)> init )
-		{
-			for(index_type i = (index_type) 1 ; i <= r  ; i++)
-			{
-				for(index_type j = (index_type) 1 ; j <= c ; j++)
-				{
-				//	std::cout << "In sparse matrix operation for element " << i << " , " << j << std::endl;
-					A.add_element(i, j , init(i,j));
-				//	std::cout << "Exiting sparse matrix operation  for element " << i << " , " << j << std::endl;
-				}
-		//		std::cout << "Row " << i << " created" <<std::endl;
-			}
-
-		}		
-		
-	
-		sparse_matrix_operations(std::string path)
-		{
-			std::ifstream file;
-		        file.open(path);
-       			if(!file)
-        		{
-                		generate_error(25);		
-       			}
-			else
-			{
-				while(!file.eof())
-			        {
-                			int col , row;
-                			double value;
-                			file >> col;
-                			file >> row;
-                			file >> value;
-        				
-					A.add_element(row,col,value);
-				}
-
-			}
-			file.close();
-			//	std::cout << "Exiting sparse matrix operation  for element " << i << " , " << j << std::endl;
-		
-
-		}
-	
-		~sparse_matrix_operations() = default;
-		//sparse_matrix_operations (sparse_matrix_operations&&) = default;
-		//sparse_matrix_operations& operator=(const sparse_matrix_operations&)  = default;
-                //sparse_matrix_operations& operator=(sparse_matrix_operations&&) = default      ;
-		
-            		
-		// Returning matrix values 
-		value_type matrix_value( index_type r , index_type c)
-		{
-			auto index = A.return_element_index(r,c); 
-			if (index < 0)
- 			{
-				return 0;
-			}
-			else
-			{
-				return A.value[index];
-			}
-		}				
-		index_type return_row_size()
-		{
-			return A.row_size();
-		}
-		index_type return_col_size() 
-		{
-			return A.col_size(); 
-		}
-		
-		void print_matrix()
-		{
-			std::cout << " Printing element " << std::endl;
-			//A.print_elements();
-			A.print_matrix(35 , 35);
-
-		//	A.print_matrix(A.row_size() , A.col_size());
-		}
-		// matrix operations on the sparse matrix
-		value_type row_sum( index_type r);
-		value_type norm();		
-		matrix_calculations::vector<index_type , value_type> SPMM(matrix_calculations::vector <index_type , value_type> ) ;	
+		sparse_matrix_operations() {};
 
 		void allocate(index_type row_start , index_type row_end , index_type col_start, index_type col_end)
                 {
@@ -431,6 +305,49 @@ namespace matrix_calculations
 		
 
 		}
+
+
+		~sparse_matrix_operations() = default;
+		//sparse_matrix_operations (sparse_matrix_operations&&) = default;
+		//sparse_matrix_operations& operator=(const sparse_matrix_operations&)  = default;
+                //sparse_matrix_operations& operator=(sparse_matrix_operations&&) = default      ;
+		
+            		
+		// Returning matrix values 
+		value_type matrix_value( index_type r , index_type c)
+		{
+			auto index = A.return_element_index(r,c); 
+			if (index < 0)
+ 			{
+				return 0;
+			}
+			else
+			{
+				return A.value[index];
+			}
+		}				
+		index_type return_row_size()
+		{
+			return A.row_size();
+		}
+		index_type return_col_size() 
+		{
+			return A.col_size(); 
+		}
+		
+		void print_matrix()
+		{
+			std::cout << " Printing element " << std::endl;
+			//A.print_elements();
+			A.print_matrix(35 , 35);
+
+		//	A.print_matrix(A.row_size() , A.col_size());
+		}
+		// matrix operations on the sparse matrix
+		value_type row_sum( index_type r);
+		value_type norm();		
+		matrix_calculations_parallel::vector<index_type , value_type> SPMM(matrix_calculations_parallel::vector <index_type , value_type> ) ;	
+
 	};
 
 	

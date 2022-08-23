@@ -1,34 +1,68 @@
-#include "BICGSTAB.h"
+#include "BICGSTAB_parallel.h"
 
-namespace solver
+namespace parallel_solver
 {
         template <typename index_type , typename value_type>
 	void BICGSTAB<index_type, value_type> :: display()
 	{
-		auto num_rows = A.return_row_size();
-		auto num_cols = A.return_col_size();
-		index_type vector_index = 0;
-		for(auto i = (index_type)1 ; i <= num_rows ; ++i)
-		{
-			std::cout << " | " ;
-			for(auto j = (index_type)1 ; j <= num_cols ; ++j)
-			{
-				std::cout<< " " << A.matrix_value(i,j) << " " ; 
-			}
-			if(i == (index_type) num_rows/2)
-			{
-				std::cout << " | " << x.value(vector_index) << " |   =   | " << b.value(vector_index) << " | "; 
-			}
-			else
-			{
-				std::cout << " | " << x.value(vector_index) << " |       | " << b.value(vector_index) << " | ";  
-			}	
-			std::cout << std::endl;
-			vector_index++;
+		int myid, nprocs;
 		
-		}
-	}
+		MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+	        MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+	
+        	printf("Attempting to print in order\n");
+        	sleep(1);
+        	MPI_Barrier(comm);
+		
+        	for( auto k=0; k<nprocs; k++){
+                	if( k == myid )
+			{
+				int colid, rowid, rowprocs, colprocs;               
+				if(mmult_comm != MPI_COMM_NULL)
+				{
+					MPI_Comm_rank(mmult_comm, &rowid);
+                        		MPI_Comm_size(mmult_comm, &rowprocs);
+				}
+				else
+				{
+					rowid = -1;
+					rowprocs = -1;
+				}
+				MPI_Comm_rank(col_comm, &colid);
+                                MPI_Comm_size(col_comm, &colprocs);
 
+				std::cout << "output for rank " << myid << " out of " << nprocs << " from col " << col_start << " to " << col_end << " and row " << row_start << " to " << row_end << std::endl;
+				std::cout << "Neighbour : top " << top << " bottom " << bottom << " left " << left << " right " << right << std::endl;
+			
+				std::cout <<"MMULT rank : " << rowid << " out of " << rowprocs << std::endl;
+
+				std::cout <<"Column rank : " << colid << " out of " << colprocs << std::endl; 	                	
+				
+				int row_counter = 0;
+				for( auto i = row_start ; i <= row_end ; i++)
+				{
+					std::cout << "|\t";
+					for( auto j = col_start ; j <= col_end ; j++)
+                			{
+						std::cout << A.matrix_value(i,j) << "\t";
+                			}
+					if(row_counter < col_end - col_start + 1)
+					{
+						std::cout <<"|\t|\t" << x.value(row_counter) << "\t|\t|\t" << b.value(row_counter) << "\t|"; 
+						row_counter++;
+					}
+					std::cout<<std::endl;
+				}
+			}
+			fflush(stdout);
+                	sleep(1);
+               		MPI_Barrier(MPI_COMM_WORLD);
+
+		}	
+
+
+	}
+/*
         template <typename index_type , typename value_type>
 	value_type BICGSTAB<index_type, value_type> :: solve( value_type tolerance , unsigned long int max_sim )
 	{
@@ -45,8 +79,8 @@ namespace solver
 		}
 
 		matrix_calculations::sparse_matrix_operations<index_type , value_type> pre_condition(b.return_size() , b.return_size());
-		matrix_calculations::vector<index_type, value_type> s_hat ((index_type)b.return_size() , (value_type) 0);
-		matrix_calculations::vector<index_type, value_type> t ((index_type)b.return_size() , (value_type) 0);
+		matrix_calculations::vector<index_type, value_type> s_hat (b.return_size() , 0);
+		matrix_calculations::vector<index_type, value_type> t (b.return_size() , 0);
 
 		matrix_calculations::vector<index_type, value_type> r = b - (A.SPMM(x));
 		matrix_calculations::vector<index_type, value_type> r_hat = r;
@@ -121,7 +155,7 @@ namespace solver
 		std::cout << "\n\n\n-------------------- Exiting after completing Iteration " << sim_num << " with residual " << r.norm() << " -------------------------------------" << std::endl;
 		return r.norm();	
 	}
-
+*/
 	template class BICGSTAB <int , double>;
 	template class BICGSTAB <int , float>;
 	template class BICGSTAB <long int , double>;

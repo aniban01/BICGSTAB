@@ -28,7 +28,7 @@ namespace initializer
 	template <typename index_type , typename value_type>
 	value_type Matrix_initializer_1(index_type r , index_type c )
 	{
-		std::cout << "Returning 1 for element " << r << " , " << c << std::endl;
+//		std::cout << "Returning 1 for element " << r << " , " << c << std::endl;
 		return (value_type)1;
 	}
 	template double Matrix_initializer_1<int, double>(int, int);
@@ -57,13 +57,20 @@ namespace initializer
 		std::vector<value_type> vec;
 		for(auto i = (index_type) 1 ; i <= r ; i++)
 		{
+//			std::cout << "row size : " << r << std::endl;
 			auto sum = (value_type) 0;
 			for(auto k = (index_type) 1 ; k <= r ; k++)
+//			for(long int k =  1 ; k <= r ; k++)
 			{
-				std::cout << "Adding for element " << i << " , " << k << " which has value " << A.matrix_value(i,k) <<std::endl;  
-				sum += A.matrix_value(i,k)*v;
+//				std::cout << "Adding for element " << i << " , " << k <<std::endl ; //" which has value " << A.matrix_value(i,k) <<std::endl;  
+				sum += A.matrix_value(i,k);
+//				std::cout << "Element " << i << " , " << k << " which has value " <<std::endl; //<< A.matrix_value(i,k) << " added " << std::endl;   
+			//	if(A.matrix_value(i,k))
+			//		break;
 			}
-			vec.push_back(sum);
+			vec.push_back(sum*v);
+//			std::cout << "Vector element " << i   << " added " << std::endl;
+
 		}	
 		return vec;
 	}
@@ -72,7 +79,6 @@ namespace initializer
 	template std::vector<double, std::allocator<double> > Vector_constant_initializer_matrix<long int, double>(long int, matrix_calculations::sparse_matrix_operations<long int, double>, double);
 	template std::vector<float, std::allocator<float> > Vector_constant_initializer_matrix<long int, float>(long int, matrix_calculations::sparse_matrix_operations<long int, float>, float);
 
-
-
+	
 }
 

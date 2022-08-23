@@ -1,3 +1,7 @@
+#ifndef matrix_allocation_2022
+#define matrix_allocation_2022
+
+
 #include <execution>
 #include <vector>
 #include <algorithm>
@@ -54,4 +58,4 @@ namespace matrix
 
 }
 
-
+#endif

@@ -39,7 +39,24 @@ void generate_error(int A)
                         std::cerr << "Error (code 23): <matrix_calculations::vector<index_type , value_type>::update_value(index_type) : Attempting to update value out of bounds\n";
                         exit(1);
                         break;
-	
+		case 25:
+                        std::cerr << "Error (code 25): <matrix_calculations::sparse_matrix_operations<std::string> : constructor issue : incorrect file name \n";
+                        exit(1);
+                        break;
+		case 30:
+			std::cerr << "Error (code 30): <parallel_solver::BICGSTAB<index_type, value_type> : constructor issue : rows not divisible by number of processors \n";
+                        exit(1);
+                        break;	
+		case 31:
+			std::cerr << "Error (code 31): <parallel_solver::BICGSTAB<index_type, value_type> : constructor issue : columns not divisible by number of processors \n";
+                        exit(1);
+                        break;	
+		case 32:
+			std::cerr << "Error (code 32): <parallel_solver::BICGSTAB<index_type, value_type> : constructor issue : processors number more than number of processors\n";
+                        exit(1);
+                        break;	
+
+
 
 		default:
 			std::cerr << "Error Unknown : Terminating execution \n";

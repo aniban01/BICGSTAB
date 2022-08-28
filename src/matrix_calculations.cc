@@ -139,6 +139,14 @@ namespace matrix_calculations
                 return B;
         }
 	
+	template <typename index_type , typename value_type>
+        void vector<index_type , value_type> :: display()
+	{
+		for( auto i = 0 ; i < size; i++)
+          	{
+               		std::cout << " " << A[i];
+             	}
+	}
 
 	template class sparse_matrix_operations <int , double>;
         template class sparse_matrix_operations <int, float >;

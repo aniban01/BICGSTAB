@@ -3,23 +3,25 @@
 int main()
 {
 	
-	auto tolerance = 0.0000000001;
+	auto tolerance = 1.0E-11;
 	std::string path = "input/west0479.csv";
 	std::cout << "............................................................................Generating sparse matrix " << std::endl;
-	matrix_calculations::sparse_matrix_operations<long int , double> A(path); 
+	//matrix_calculations::sparse_matrix_operations<long int , double> A(path); 
+	matrix_calculations::sparse_matrix_operations<long int , double> A(30,30,&initializer::Matrix_initializer<long int,double>); 	
 	//A.print_matrix();
 	std::cout << "...................................................................................Generating vector " << std::endl;
 	auto row_size  = (long int)A.return_row_size();
   	std::cout << "row size :" << row_size << std::endl;
-	std::vector<double> V = initializer::Vector_constant_initializer_matrix<long int , double>(row_size, A, (double)4);
+	std::vector<double> V = initializer::Vector_constant_initializer_matrix<long int , double>(row_size, A, (double)2);
 	std::cout << ".................................................................................Generating BICGSTAB" << std::endl;
-//	solver::BICGSTAB<long int, double> B(row_size,row_size,&initializer::Matrix_initializer<long int,double>, &initializer::Vector_initializer<long int,double> ,V);
-	solver::BICGSTAB<long int, double> B(row_size,  path, &initializer::Vector_initializer<long int,double> ,V);
+	solver::BICGSTAB<long int, double> B(row_size,row_size,&initializer::Matrix_initializer<long int,double>, &initializer::Vector_initializer<long int,double> ,V);
+//	solver::BICGSTAB<long int, double> B(row_size,  path, &initializer::Vector_initializer<long int,double> ,V);
 
 //	std::cout << "....................................................................................Outputing matrix" << std::endl;
 //	B.display();
 	std::cout << "..................................................................................Computing BICGSTAB" << std::endl;
-	auto error = B.solve(tolerance, 1000000);
+	auto error = B.solve(tolerance, 3);
+
 	std::cout << "..................................................................................BICGSTAB completed" << std::endl << std::endl;;
 //	B.display( );
 	std::cout << "Error after convergance " << error << std::endl;

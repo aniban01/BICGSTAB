@@ -188,6 +188,7 @@ namespace matrix_calculations
 			}
 		}
 		
+		void display();
 
 		vector operator + (value_type num);
         	vector operator * (value_type num);

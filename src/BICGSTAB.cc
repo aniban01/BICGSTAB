@@ -57,6 +57,23 @@ namespace solver
 		matrix_calculations::vector<index_type, value_type> p_hat = pre_condition.SPMM(p);
 		matrix_calculations::vector<index_type, value_type> v = A.SPMM(p_hat);
 		alpha =  rho / (r_hat.dot_product(v));
+		 std::cout << "Alpha before entering loop " << alpha << std::endl;
+                std::cout << "rho before entering loop " << rho << std::endl;
+                std::cout << "norm_rhs before entering loop " << norm_rhs << std::endl;
+		
+		std::cout << "p before entering loop " ;
+                p.display();
+                std::cout << std::endl;
+
+		std::cout << "p_hat before entering loop " ;
+		p_hat.display();
+		std::cout << std::endl;
+		std::cout << "v before entering loop " ;
+		v.display();
+                std::cout << std::endl << "r_hat before entering loop " ;
+		r_hat.display(); 
+		std::cout << std::endl;
+		std::cout << "(r_hat.dot_product(v)) before entering loop " << (r_hat.dot_product(v)) << std::endl;
 		matrix_calculations::vector<index_type, value_type> s  = r - (v * alpha);
 		if( s.norm()/norm_rhs < tolerance)
 		{
@@ -116,7 +133,7 @@ namespace solver
         	        	}
  
 			}			
-			
+		display();	
 		}
 		std::cout << "\n\n\n-------------------- Exiting after completing Iteration " << sim_num << " with residual " << r.norm() << " -------------------------------------" << std::endl;
 		return r.norm();	

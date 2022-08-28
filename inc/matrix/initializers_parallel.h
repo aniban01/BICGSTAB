@@ -1,6 +1,5 @@
 
 
-#include "matrix_calculations.h"
 #include "matrix_calculations_parallel.h"
 
 #ifndef initializer_2022
@@ -19,12 +18,12 @@
  *     	
  *  	value_type Vector_initializer(index_type r , std::vector<value_type> A) :	The templated function returns a value of type value type to initialize a vector when the index (r) and vector of value
  *  											of type std::vector <value_type> is provided 
- *  	std::vector<value_type> Vector_constant_initializer_matrix(index_type r , matrix_calculations::sparse_matrix_operations<index_type , value_type> A , value_type v) : 	
+ *  	std::vector<value_type> Vector_constant_initializer_matrix(index_type r , matrix_calculations_parallel::sparse_matrix_operations<index_type , value_type> A , value_type v) : 	
  *  											The templated function return a std::vector<value_type> which returns the vector b in Ax = b when matrix A and vector 
  *  											with constant value v is given.  
  **/
 
-namespace initializer
+namespace initializer_parallel
 {
 
 	template <typename index_type , typename value_type>
@@ -34,11 +33,15 @@ namespace initializer
         value_type Matrix_initializer_1(index_type r , index_type c );
 
  
+       template <typename index_type , typename value_type>
+       value_type Vector_initializer(index_type r , std::vector<value_type> A);
+
+	 template <typename index_type , typename value_type>
+        value_type Vector_initializer_1(index_type r , value_type i);
+
+
 	template <typename index_type , typename value_type>
-        value_type Vector_initializer(index_type r , std::vector<value_type> A);
-	
-	template <typename index_type , typename value_type>
-        std::vector<value_type> Vector_constant_initializer_matrix(index_type r , matrix_calculations::sparse_matrix_operations<index_type , value_type> A , value_type v); 
+        matrix_calculations_parallel::vector<index_type , value_type> Vector_constant_initializer_matrix( matrix_calculations_parallel::sparse_matrix_operations<index_type , value_type> A ,index_type lower,  value_type v); 
 }
 
 #endif

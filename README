@@ -1,0 +1,68 @@
+File Directories
+.
+├── Makefile
+├── README
+├── dep
+├── inc
+│   ├── matrix
+│   │   ├── initializers.h
+│   │   ├── initializers_parallel.h
+│   │   ├── matrix_allocation.h
+│   │   ├── matrix_calculations.h
+│   │   ├── matrix_calculations_parallel.h
+│   │   └── parallel_alg.h
+│   ├── program_utilization
+│   │   ├── error_handling.h
+│   │   └── global_variables.h
+│   └── solver
+│       ├── BICGSTAB.h
+│       └── BICGSTAB_parallel.h
+├── input
+│   └── west0479.csv
+├── obj
+├── src
+│   ├── BICGSTAB.cc
+│   ├── BICGSTAB_parallel.cc
+│   ├── Main.cc
+│   ├── Main_parallel.cc
+│   ├── error_handling.cc
+│   ├── initializers.cc
+│   ├── initializers_parallel.cc
+│   ├── matrix_allocation.cc
+│   ├── matrix_calculations.cc
+│   ├── matrix_calculations_parallel.cc
+│   └── parallel_alg.cc
+└── test_case
+    ├── code
+    │   ├── Solver_linear.cc
+    │   ├── Solver_parallel.cc
+    │   ├── matrix_linear.cc
+    │   ├── matrix_parallel.cc
+    │   ├── vector_linear.cc
+    │   └── vector_parallel.cc
+    ├── object
+    └── output_dir
+
+Compilation Pre Requisites:
+	C++20 
+	OPENMPI
+
+Test Executables:
+	Final : 30 by 30 matrix BICGSTAB solver
+	Final_parallel : 30 by 30 matrix BICGSTAB solver
+
+Parameter Update :
+	number of openmp threads: thread_num variable in inc/program_utilization/global_variables.h
+	allignment size : allignment variable in inc/program_utilization/global_variables.h
+
+Executable generation commands:
+	make all
+
+Running Executables:
+	./Final
+	mpirun --oversubscribe -n [Number of Processors] Final_parallel
+
+Cleaning commands:
+	make clean
+
+	

@@ -8,6 +8,14 @@
 namespace solver
 {
 	template <typename index_type , typename value_type>
+	 /**
+          * \brief class to solve the BICGSTAB Algorithm 
+          * \description This class impliments the BICGSTAB Algorithm 
+     	  * \function 
+	  * solve()  = solves the BICGSTAB algorithm
+	  * display() = displays the output matrix
+	**/
+
 	
 	class BICGSTAB
 	{

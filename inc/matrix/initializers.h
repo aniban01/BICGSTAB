@@ -1,7 +1,6 @@
 
 
 #include "matrix_calculations.h"
-#include "matrix_calculations_parallel.h"
 
 #ifndef initializer_2022
 #define initializer_2022

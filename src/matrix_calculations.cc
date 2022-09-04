@@ -8,16 +8,12 @@ namespace matrix_calculations
         template class vector <long int , double>;
         template class vector <long int , float>;
 
-//	template <typename index_type , typename value_type>
-//	int vector<index_type , value_type>::index = 0;
 // Functions for class vector
 	template <typename index_type , typename value_type>
 	value_type vector<index_type , value_type> :: norm()
 	{
  		
 	       	value_type sum = (value_type) 0;
-//        	omp_set_num_threads(thread_num);
-//		#pragma omp parallel for simd reduction(+:sum) 
 		for (index_type i  = 0 ; i < size ; i++)
 		{
 			sum += A[i]* A[i];
@@ -29,14 +25,11 @@ namespace matrix_calculations
 	template <typename index_type , typename value_type>
         value_type vector<index_type , value_type> :: dot_product(matrix_calculations::vector <index_type , value_type> B )
         {
-        	//B.output_pointer(); 
 	       value_type sum = (value_type)0 ;
                 if(size != B.return_size())
 		{
 			generate_error(22);
 		}
-//		omp_set_num_threads(thread_num);
-//                #pragma omp parallel for simd reduction(+:sum) 
                 for(index_type a = 0 ; a < size ; a++)
                 {
                         sum += A[a] * B.value(a);
@@ -92,7 +85,6 @@ namespace matrix_calculations
 	vector <index_type , value_type> vector<index_type , value_type>::operator + (vector<index_type , value_type > num)
         {
                 
-		//num.output_pointer();
 		vector<index_type, value_type> B{size};
                 for( auto i = (index_type) 0 ; i < size ; i ++)
                 {
@@ -103,7 +95,6 @@ namespace matrix_calculations
         template <typename index_type , typename value_type>
 	vector <index_type , value_type> vector<index_type , value_type>::operator * (vector<index_type , value_type > num)
         {
-                //num.output_pointer();
 
 		vector<index_type, value_type> B{size};
                 for( auto i = (index_type) 0 ; i < size ; i ++)
@@ -116,7 +107,6 @@ namespace matrix_calculations
         template <typename index_type , typename value_type>
 	vector <index_type , value_type> vector<index_type , value_type>::operator / (vector<index_type , value_type > num)
         {
-                //num.output_pointer();
 
 		vector<index_type, value_type> B{size};
                 for( auto i = (index_type) 0 ; i < size ; i ++)
@@ -129,7 +119,6 @@ namespace matrix_calculations
         template <typename index_type , typename value_type>
 	vector <index_type , value_type> vector<index_type , value_type>::operator - (vector<index_type , value_type >  num)
         {
-                //num.output_pointer();
 
 		vector<index_type, value_type> B{size};
                 for( auto i = (index_type) 0 ; i < size ; i ++)
@@ -173,13 +162,13 @@ namespace matrix_calculations
 	template <typename index_type , typename value_type>
 	matrix_calculations::vector<index_type , value_type>  sparse_matrix_operations<index_type , value_type> :: SPMM(matrix_calculations::vector <index_type , value_type> B) 
 	{
-		//B.output_pointer(); 
 		index_type row_index = 1 , col_index = 0 , col;
 		auto row_size  =  (index_type) A.row.size();
 		auto col_size  =  (index_type) A.col.size();
 		
 		value_type sum = (value_type) 0 ;
 		matrix_calculations::vector <index_type , value_type> product(B.return_size());
+		
 		for(auto value : A.value)
 		{
 			col = A.col[col_index];
@@ -230,12 +219,6 @@ namespace matrix_calculations
 		std::cout << "sum of row " << r << " is " << sum;
 		return sum;
 	}
-/*
-	template double sparse_matrix_operations::row_sum <int, double> (int);
-	template float sparse_matrix_operations::row_sum <int, float>(int);
-	template double sparse_matrix_operations::row_sum<long unsigned int, double>(long unsigned int);
-	template float sparse_matrix_operations::row_sum<long unsigned int, float>(long unsigned int);
-*/
 
 }
 
